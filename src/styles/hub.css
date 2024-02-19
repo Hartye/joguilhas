@@ -1,0 +1,113 @@
+:root {
+    --dark-violet: #22092C;
+    --dark-red: #872341;
+    --red: #BE3144;
+    --orange: #F05941;
+    --white: #F6F1EE;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-family: 'Protest Guerrilla', 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 5rem;
+    color: var(--white);
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--dark-violet);
+
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    width: 500px;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+main > div.jogos {
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    background-color: var(--orange);
+    border-radius: 10px;
+}
+
+main > div.jogos > a {
+    width: 100px;
+    text-decoration: none;
+}
+
+main > div.jogos > a > div {
+    width: 100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: var(--white);
+    border-radius: 5px;
+
+    transition: all .2s ease-in-out;
+}
+
+main > div.jogos > a > div img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+main > div.jogos > a > div p {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--dark-violet);
+}
+
+main > div.jogos > a > div:hover {
+    background-color: var(--red);
+    cursor: pointer;
+    
+    transition: all .2s ease-in-out;
+    transform: scale(1.1);
+}
+
+main > div.jogos > a > div:hover p {
+    color: var(--white);
+}
+
+main > div.criadores {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+main > div.criadores a {
+    text-decoration: none;
+    color: var(--white);
+    font-size: 1.2rem;
+}
+
+main > div.criadores a:hover {
+    color: var(--red);
+    cursor: pointer;
+}
