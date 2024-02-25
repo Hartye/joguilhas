@@ -104,7 +104,7 @@ const updateFromFirebase = () => {
                 chat.appendChild(newLetra);
             });
 
-            setTimeout(updateFromFirebase, 2000);
+            setTimeout(updateFromFirebase, 1000);
         })
         .catch((err) => { console.log(err) })
 }
