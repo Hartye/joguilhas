@@ -5,6 +5,8 @@ import path from "path";
 import { addLetra } from "./controllers/addLetra.js";
 import { addWord } from "./controllers/addWord.js";
 import { getLetras } from "./controllers/getLetras.js";
+import { getWords } from "./controllers/getWords.js";
+import { getRoomWord } from "./controllers/getRoomWord.js";
 
 const server = express();
 const router = express.Router();
@@ -34,6 +36,14 @@ router.post("/add/word", bodyParser.json(), (req, res) => {
 
 router.post("/get/letras", bodyParser.json(), (req, res) => {
     return getLetras(req, res);
+})
+
+router.get("/get/words", (req, res) => {
+    return getWords(req, res);
+})
+
+router.post("/get/room/word", bodyParser.json(), (req, res) => {
+    return getRoomWord(req, res);
 })
 
 // Required files
