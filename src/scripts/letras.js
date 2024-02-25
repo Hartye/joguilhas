@@ -90,8 +90,7 @@ const updateFromFirebase = () => {
             "content-type": "application/json",
         },
         body: JSON.stringify({
-            letra: letra,
-            token: "token"
+            room: room
         })
     })
         .then((data) => data.json())
