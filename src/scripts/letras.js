@@ -1,5 +1,6 @@
 const word = ["C", "A", "R", "R", "O"];
 const currentWords = [];
+const apiBaseUrl = "https://joguilhas.vercel.app";
 
 const addListenerToButtons = () => {
     const keys = document.querySelectorAll(".teclado button");
@@ -12,7 +13,7 @@ const addListenerToButtons = () => {
     });
 
     btnConfirm.addEventListener("click", () => {
-        alert("Listened")
+        addLetra("A")
     })
 }
 
@@ -37,6 +38,26 @@ const updateGame = () => {
             s.innerHTML = currentWords[index];
         }
     });
+}
+
+const addLetra = (letra) => {
+    const url = new Request(apiBaseUrl + "/add/letras");
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            letra: letra,
+            user: "token"
+        })
+    })
+        .then((data) => data.json())
+        .then((data) => {
+            alert(data);
+        })
+        .catch((err) => { console.log(err) })
 }
 
 addListenerToButtons();
