@@ -3,7 +3,6 @@ import { db } from "../firebase-config.js"
 
 export const addWord = async (req, res) => {
     try {
-        console.log(req.body);
         const word = req.body.word;
         const wordQuery = query(collection(db, "words"));
 
