@@ -1,5 +1,4 @@
-const word = [];
-const currentWords = [];
+let currentWords = [];
 const apiBaseUrl = "https://joguilhas.vercel.app";
 
 const addListenerToButtons = () => {
@@ -13,7 +12,9 @@ const addListenerToButtons = () => {
     });
 
     btnConfirm.addEventListener("click", () => {
-        addLetra("A")
+        addLetra(currentWords.join(''));
+        currentWords = [];
+        updateGame();
     })
 }
 
@@ -23,7 +24,7 @@ const addKeyToScreen = (key) => {
         updateGame();
     }
     else {
-        if (currentWords.length < word.length) {
+        if (currentWords.length < 5) {
             currentWords.push(String(key));
             updateGame();
         }
@@ -55,13 +56,16 @@ const addLetra = (letra) => {
     })
         .then((data) => data.json())
         .then((data) => {
-            alert(data);
+            if (data) {
+                alert("Correto");
+                location.pathname = "/hub";
+            }
         })
         .catch((err) => { console.log(err) })
 }
 
 const updateFromFirebase = () => {
-    const url = new Request(apiBaseUrl + "/add/letra");
+    const url = new Request(apiBaseUrl + "/get/letras");
 
     fetch(url, {
         method: "POST",
@@ -75,7 +79,7 @@ const updateFromFirebase = () => {
     })
         .then((data) => data.json())
         .then((data) => {
-            alert(data);
+            
         })
         .catch((err) => { console.log(err) })
 }

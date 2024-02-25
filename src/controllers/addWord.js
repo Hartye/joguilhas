@@ -10,6 +10,7 @@ export const addWord = async (req, res) => {
             wordQuery,
             {
                 word: word,
+                id: new Date().getTime().toString(),
                 timeCreated: serverTimestamp()
             }
         )
