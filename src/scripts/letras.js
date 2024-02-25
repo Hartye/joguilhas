@@ -96,7 +96,16 @@ const updateFromFirebase = () => {
     })
         .then((data) => data.json())
         .then((data) => {
+            const chat = document.querySelector(".chat");
+            chat.innerHTML = "";
 
+            data.forEach(s => {
+                const newLetra = document.createElement("p");
+                newLetra.innerHTML = s;
+                chat.appendChild(newLetra);
+            });
+
+            setTimeout(updateFromFirebase, 2000);
         })
         .catch((err) => { console.log(err) })
 }
