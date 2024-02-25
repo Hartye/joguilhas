@@ -1,0 +1,102 @@
+:root {
+    --dark-violet: #22092C;
+    --dark-red: #872341;
+    --red: #BE3144;
+    --orange: #F05941;
+    --white: #F6F1EE;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: var(--dark-violet);
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+main section.chat {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    background-color: var(--white);
+    border: 2px solid var(--red);
+    border-radius: 5px;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+main section.chat > div.history {
+    width: 100%;
+    flex-grow: 1;
+    background-color: var(--orange);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 5px;
+}
+
+main section.chat > div.history > p {
+    width: 100%;
+    font-size: 1.3rem;
+    color: var(--dark-red);
+    background-color: var(--white);
+    padding: .5rem 1rem;
+    border-radius: 10px;
+}
+
+main section.chat > div.controls {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+}
+
+main section.chat > div.controls > button {
+    border: none;
+    font-size: 1.1rem;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    background-color: var(--red);
+    color: var(--white);
+}
+
+main section.chat > div.controls > button:hover {
+    cursor: pointer;
+}
+
+main section.chat > div.controls > input {
+    flex-grow: 1;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--dark-red);
+    color: var(--white);
+    padding: .5rem;
+}
+
+main section.chat > div.controls > input:focus {
+    outline: 1px solid var(--orange);
+}
+
+main section.chat > div.controls > input::placeholder {
+    color: var(--orange);
+}
