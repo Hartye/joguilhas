@@ -101,5 +101,4 @@ const updateFromFirebase = () => {
         .catch((err) => { console.log(err) })
 }
 
-getRoomWord();
 addListenerToButtons();
