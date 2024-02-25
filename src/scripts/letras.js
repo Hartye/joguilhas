@@ -1,4 +1,4 @@
-const word = ["C", "A", "R", "R", "O"];
+const word = [];
 const currentWords = [];
 const apiBaseUrl = "https://joguilhas.vercel.app";
 
@@ -41,7 +41,7 @@ const updateGame = () => {
 }
 
 const addLetra = (letra) => {
-    const url = new Request(apiBaseUrl + "/add/letras");
+    const url = new Request(apiBaseUrl + "/add/letra");
 
     fetch(url, {
         method: "POST",
@@ -50,7 +50,7 @@ const addLetra = (letra) => {
         },
         body: JSON.stringify({
             letra: letra,
-            user: "token"
+            token: "token"
         })
     })
         .then((data) => data.json())

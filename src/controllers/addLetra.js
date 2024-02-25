@@ -1,15 +1,19 @@
-import { collection, query, addDoc } from "firebase/firestore"
+import { collection, query, addDoc, serverTimestamp } from "firebase/firestore"
 import { db } from "../firebase-config.js"
 
 export const addLetra = async (req, res) => {
+    const letra = req.body.letra;
+    const token = req.body.token;
     const testQuery = query(collection(db, "test"));
 
     await addDoc(
         testQuery,
         {
-            test: "Olá"
+            letra: letra,
+            token: token,
+            timeCreated: serverTimestamp()
         }
     )
 
-    res.json(true);
+    return res.json(true);
 }
