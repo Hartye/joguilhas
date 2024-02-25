@@ -1,3 +1,4 @@
+const room = 1;
 let currentWords = [];
 const apiBaseUrl = "https://joguilhas.vercel.app";
 
@@ -42,7 +43,7 @@ const updateGame = () => {
 }
 
 const addLetra = (letra) => {
-    const url = new Request(apiBaseUrl + "/add/letra");
+    let url = new Request(apiBaseUrl + "/get/room/word");
 
     fetch(url, {
         method: "POST",
@@ -50,16 +51,32 @@ const addLetra = (letra) => {
             "content-type": "application/json",
         },
         body: JSON.stringify({
-            letra: letra,
-            token: "token"
+            room: room
         })
     })
-        .then((data) => data.json())
-        .then((data) => {
-            if (data) {
-                alert("Correto");
-                location.pathname = "/hub";
-            }
+        .then((id) => id.json())
+        .then((id) => {
+            url = new Request(apiBaseUrl + "/add/letra");
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    letra: letra,
+                    room: room,
+                    id: id
+                })
+            })
+                .then((data) => data.json())
+                .then((data) => {
+                    if (data) {
+                        alert("Correto");
+                        location.pathname = "/hub";
+                    }
+                })
+                .catch((err) => { console.log(err) })
         })
         .catch((err) => { console.log(err) })
 }
@@ -79,9 +96,10 @@ const updateFromFirebase = () => {
     })
         .then((data) => data.json())
         .then((data) => {
-            
+
         })
         .catch((err) => { console.log(err) })
 }
 
+getRoomWord();
 addListenerToButtons();

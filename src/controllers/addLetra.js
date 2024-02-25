@@ -8,15 +8,12 @@ export const addLetra = async (req, res) => {
 
     const letraQuery = query(collection(db, "room-" + room));
 
-    const wordQuery = query(
-        collection(db, "words"),
-        where("id", "==", id)
-    );
+    const wordQuery = query(collection(db, "words"));
     const wordSnapshot = await getDocs(wordQuery);
 
-    const word = "";
+    const word = [];
     wordSnapshot.forEach(async doc => {
-        word = doc.data().word;
+        word.push(doc.data());
     })
 
     await addDoc(
@@ -29,7 +26,7 @@ export const addLetra = async (req, res) => {
         }
     )
 
-    if (letra == word) {
+    if (letra == word.find(s => s.id == id).word) {
         const letrasSnapshot = await getDocs(letraQuery);
         letrasSnapshot.forEach(async doc => {
             await deleteDoc(doc(db, "room-" + room, doc.id));
