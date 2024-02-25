@@ -1,6 +1,7 @@
 import express from "express"
 import { fileURLToPath } from "url"
 import path from "path";
+import { addLetra } from "./controllers/addLetra.js";
 
 const server = express();
 const baseURL = process.env.PORT || 3000;
@@ -18,6 +19,10 @@ server.get("/hub", (req, res) => {
 server.get("/games/letras", (req, res) => {
     return res.sendFile(__dirname + "/pages/letras.html");
 });
+
+server.post("/add/letras", (req, res) => {
+    return addLetra(req, res);
+})
 
 // Required files
 server.get("/styles/hub.css", (req, res) => {
