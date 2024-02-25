@@ -3,12 +3,17 @@ const currentWords = [];
 
 const addListenerToButtons = () => {
     const keys = document.querySelectorAll(".teclado button");
+    const btnConfirm = document.querySelector("#confirm");
 
     keys.forEach(s => {
         s.addEventListener("click", () => {
             addKeyToScreen(s.id)
         });
     });
+
+    btnConfirm.addEventListener("click", () => {
+        alert("Listened")
+    })
 }
 
 const addKeyToScreen = (key) => {
