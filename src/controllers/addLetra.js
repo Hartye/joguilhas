@@ -1,4 +1,4 @@
-import { collection, query, addDoc, getDocs, serverTimestamp, where, deleteDoc } from "firebase/firestore"
+import { collection, query, addDoc, getDocs, serverTimestamp, doc, deleteDoc } from "firebase/firestore"
 import { db } from "../firebase-config.js"
 
 export const addLetra = async (req, res) => {
@@ -28,8 +28,8 @@ export const addLetra = async (req, res) => {
 
     if (letra == word.find(s => s.id == id).word) {
         const letrasSnapshot = await getDocs(letraQuery);
-        letrasSnapshot.forEach(async doc => {
-            await deleteDoc(doc(db, "room-" + room, doc.id));
+        letrasSnapshot.forEach(async s => {
+            await deleteDoc(doc(db, "room-" + room, s.id));
         })
 
         return res.json(true);
