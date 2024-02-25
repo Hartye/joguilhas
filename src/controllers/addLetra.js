@@ -3,14 +3,14 @@ import { db } from "../firebase-config.js"
 
 export const addLetra = async (req, res) => {
     const letra = req.body.letra;
-    const token = req.body.token;
-    const testQuery = query(collection(db, "test"));
+    const room = req.body.room;
+    const testQuery = query(collection(db, "room-" + room));
 
     await addDoc(
         testQuery,
         {
             letra: letra,
-            token: token,
+            room: room,
             timeCreated: serverTimestamp()
         }
     )

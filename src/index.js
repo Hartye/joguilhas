@@ -1,8 +1,10 @@
 import express from "express";
+import bodyParser from "body-parser";
 import { fileURLToPath } from "url"
 import path from "path";
 import { addLetra } from "./controllers/addLetra.js";
 import { addWord } from "./controllers/addWord.js";
+import { getLetras } from "./controllers/getLetras.js";
 
 const server = express();
 const router = express.Router();
@@ -22,12 +24,16 @@ router.get("/games/letras", (req, res) => {
     return res.sendFile(__dirname + "/pages/letras.html");
 });
 
-router.post("/add/letra", (req, res) => {
+router.post("/add/letra", bodyParser.json(), (req, res) => {
     return addLetra(req, res);
 })
 
-router.post("/add/word", (req, res) => {
+router.post("/add/word", bodyParser.json(), (req, res) => {
     return addWord(req, res);
+})
+
+router.post("/get/letras", bodyParser.json(), (req, res) => {
+    return getLetras(req, res);
 })
 
 // Required files

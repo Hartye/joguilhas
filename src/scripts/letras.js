@@ -60,4 +60,24 @@ const addLetra = (letra) => {
         .catch((err) => { console.log(err) })
 }
 
+const updateFromFirebase = () => {
+    const url = new Request(apiBaseUrl + "/add/letra");
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            letra: letra,
+            token: "token"
+        })
+    })
+        .then((data) => data.json())
+        .then((data) => {
+            alert(data);
+        })
+        .catch((err) => { console.log(err) })
+}
+
 addListenerToButtons();

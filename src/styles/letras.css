@@ -30,7 +30,17 @@ body {
 }
 
 main {
-    width: 500px;
+    width: 700px;
+    height: fit-content;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: end;
+    gap: 10px;
+}
+
+main > section.content {
+    width: 100%;
     height: fit-content;
 
     display: flex;
@@ -39,14 +49,14 @@ main {
     gap: 20px;
 }
 
-main > nav {
+main > section.content > nav {
     width: 100%;
 
     display: flex;
     justify-content: flex-end;
 }
 
-main > nav a {
+main > section.content > nav a {
     padding: .5rem 1rem;
     border-radius: 10px;
     background-color: var(--white);
@@ -54,12 +64,12 @@ main > nav a {
     text-decoration: none;
 }
 
-main > nav a:hover {
+main > section.content > nav a:hover {
     background-color: var(--red);
     color: var(--white);
 }
 
-main > div.jogo {
+main > section.content > div.jogo {
     width: 100%;
     border: 5px solid var(--white);
     padding: 1rem;
@@ -69,7 +79,7 @@ main > div.jogo {
     justify-content: space-evenly;
 }
 
-main > div.jogo span {
+main > section.content > div.jogo span {
     width: 60px;
     height: 70px;
     border-radius: 10px;
@@ -82,7 +92,7 @@ main > div.jogo span {
     align-items: center;
 }
 
-main > div.teclado {
+main > section.content > div.teclado {
     width: 100%;
 
     display: flex;
@@ -91,7 +101,7 @@ main > div.teclado {
     justify-content: center;
 }
 
-main > div.teclado button {
+main > section.content > div.teclado button {
     min-width: 40px;
     min-height: 40px;
     padding: .5rem;
@@ -102,17 +112,17 @@ main > div.teclado button {
     border: none;
 }
 
-main > div.teclado button:hover {
+main > section.content > div.teclado button:hover {
     cursor: pointer;
     background-color: var(--red);
     color: var(--white);
 }
 
-main > div.controles {
+main > section.content > div.controles {
     width: 100%;
 }
 
-main > div.controles button {
+main > section.content > div.controles button {
     width: 100%;
     padding: .5rem 0;
     background-color: var(--white);
@@ -122,8 +132,33 @@ main > div.controles button {
     border: none;
 }
 
-main > div.controles button:hover {
+main > section.content > div.controles button:hover {
     cursor: pointer;
     background-color: var(--red);
     color: var(--white);
+}
+
+main > div.chat {
+    width: 100%;
+    height: 400px;
+    background-color: var(--white);
+    border-radius: 10px;
+    border: 5px solid var(--orange);
+    padding: 10px;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+main > div.chat > p {
+    width: 100%;
+    min-height: 30px;
+    font-size: 1.3rem;
+    color: var(--dark-violet);
+    font-weight: 600;
+    border-bottom: 2px dotted var(--orange);
 }
