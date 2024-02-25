@@ -110,4 +110,5 @@ const updateFromFirebase = () => {
         .catch((err) => { console.log(err) })
 }
 
+updateFromFirebase();
 addListenerToButtons();
