@@ -18,6 +18,8 @@ const __dirname = path.dirname(__fileName);
 const app = createServer(server);
 const io = new Server(app);
 
+let rooms = [];
+
 // Socket
 io.on('connection', (socket) => {
     console.log(("User connected: " + socket.id));
@@ -25,6 +27,29 @@ io.on('connection', (socket) => {
     socket.on('message', (data) => {
         console.log("Message: " + data + "\nFrom: " + socket.id);
         io.emit('message', data);
+    });
+
+    socket.on('join room', (data) => {
+        rooms.push({
+            ...data,
+            id: socket.id
+        });
+        console.log(rooms);
+    });
+
+    socket.on('move', (data) => {
+        const index = rooms.findIndex(s => s.id === socket.id);
+        rooms[index] = {
+            ...data,
+            id: socket.id
+        }
+
+        io.emit('move', rooms);
+    });
+
+    socket.on('disconnect', () => {
+        rooms.splice(rooms.findIndex(s => s.id == socket.id), 1);
+        console.log(rooms);
     });
 });
 
@@ -45,6 +70,11 @@ router.get("/games/chat", (req, res) => {
     return res.sendFile(__dirname + "/pages/chat.html");
 });
 
+router.get("/games/chase", (req, res) => {
+    return res.sendFile(__dirname + "/pages/chase.html");
+});
+
+// Endpoints da API
 router.post("/add/letra", bodyParser.json(), (req, res) => {
     return addLetra(req, res);
 })
@@ -78,12 +108,24 @@ router.get("/styles/chat.css", (req, res) => {
     return res.sendFile(__dirname + "/styles/chat.css");
 });
 
+router.get("/styles/chase.css", (req, res) => {
+    return res.sendFile(__dirname + "/styles/chase.css");
+});
+
 router.get("/scripts/letras.js", (req, res) => {
     return res.sendFile(__dirname + "/scripts/letras.js");
 });
 
+router.get("/scripts/chase.js", (req, res) => {
+    return res.sendFile(__dirname + "/scripts/chase.js");
+});
+
 router.get("/images/chat.svg", (req, res) => {
     return res.sendFile(__dirname + "/images/chat.svg");
+});
+
+router.get("/images/chase.svg", (req, res) => {
+    return res.sendFile(__dirname + "/images/chase.svg");
 });
 
 router.get("/images/abc.png", (req, res) => {

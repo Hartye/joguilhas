@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/chat.css">
+    <link rel="stylesheet" href="../styles/chase.css">
+    <title>Chase</title>
+</head>
+
+<body>
+    <div>
+        <a href="https://joguilhas.vercel.app/hub">Voltar</a>
+    </div>
+    <canvas id="jogo" width="800" height="400"></canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        class Player {
+            constructor(posX, posY, moveSpeed, width, height, color) {
+                this.posX = posX;
+                this.posY = posY;
+                this.moveSpeed = moveSpeed;
+                this.width = width;
+                this.height = height;
+                this.color = color;
+            }
+        }
+
+        const canvas = document.querySelector("#jogo");
+        const ctx = canvas.getContext("2d");
+        const canvasHeight = 400;
+        const canvasWidth = 800;
+
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+        const player = new Player(10, 10, 10, 50, 50, `#${randomColor}`);
+
+        const clearCanvas = () => {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        const updateGame = (user) => {
+            ctx.fillStyle = user.color;
+            ctx.fillRect(user.posX, user.posY, user.width, user.height);
+        }
+
+        updateGame(player);
+
+        window.addEventListener("keydown", (event) => {
+            let update = false;
+
+            if (event.code == "KeyD") {
+                player.posX += player.posX < (canvasWidth - player.moveSpeed - player.width) ? player.moveSpeed : 0;
+                update = true;
+            }
+            if (event.code == "KeyA") {
+                player.posX -= player.posX > (0 + player.moveSpeed) ? player.moveSpeed : 0;
+                update = true;
+            }
+            if (event.code == "KeyW") {
+                player.posY -= player.posY > (0 + player.moveSpeed) ? player.moveSpeed : 0;
+                update = true;
+            }
+            if (event.code == "KeyS") {
+                player.posY += player.posY < (canvasHeight - player.moveSpeed - player.height) ? player.moveSpeed : 0;
+                update = true;
+            }
+
+            if (update === true) {
+                socket.emit('move', player)
+            }
+        });
+
+        socket.emit("join room", player);
+
+        socket.on('move', data => {
+            console.log(data);
+            clearCanvas();
+
+            data.forEach(s => {
+                if (s.id == socket.id) {
+                    player.posX = s.posX;
+                    player.posY = s.posY;
+                    updateGame(player);
+                }
+                else {
+                    const newPlayer = new Player(s.posX, s.posY, s.moveSpeed, s.width, s.height, s.color);
+                    updateGame(newPlayer);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
