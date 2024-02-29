@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <h1 id="enemy"></h1>
     <div>
         <a href="https://joguilhas.vercel.app/hub">Voltar</a>
     </div>
@@ -24,24 +25,30 @@
         const socket = io();
 
         class Player {
-            constructor(posX, posY, moveSpeed, width, height, color) {
+            constructor(posX, posY, moveSpeed, width, height, color, enemy, afk) {
                 this.posX = posX;
                 this.posY = posY;
                 this.moveSpeed = moveSpeed;
                 this.width = width;
                 this.height = height;
                 this.color = color;
+                this.enemy = enemy;
+                this.afk = afk;
             }
         }
 
+        const displayRole = document.querySelector("#enemy");
         const canvas = document.querySelector("#jogo");
         const ctx = canvas.getContext("2d");
         const canvasHeight = 400;
         const canvasWidth = 800;
 
-        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        const choosePlayerRole = Math.floor(Math.random() * (10 - 0) + 0);
+        const playerRole = choosePlayerRole <= 3 ? true : false;
 
-        const player = new Player(10, 10, 10, 50, 50, `#${randomColor}`);
+        const player = new Player(10, 10, 10, 50, 50, playerRole ? "#FF0000" : "#00FF00", playerRole, 1800);
+
+        displayRole.innerHTML = player.enemy === true ? "Lobo" : "Ovelha";
 
         const clearCanvas = () => {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -82,7 +89,6 @@
         socket.emit("join room", player);
 
         socket.on('move', data => {
-            console.log(data);
             clearCanvas();
 
             data.forEach(s => {
@@ -96,6 +102,13 @@
                     updateGame(newPlayer);
                 }
             });
+        });
+
+        socket.on('dead', playerId => {
+            if (socket.id == playerId) {
+                alert("Killed");
+                location.reload();
+            }
         });
     </script>
 </body>
