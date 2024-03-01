@@ -26,24 +26,14 @@ body {
     gap: 10px;
 }
 
-h1 {
-    font-family: 'Protest Guerrilla', 'Roboto', Arial, Helvetica, sans-serif;
-    font-size: 5rem;
-    color: var(--white);
-    margin: 2rem 0;
-}
-
-h2 {
-    width: 100%;
-    text-align: center;
-    font-size: 2rem;
-    color: var(--white);
+canvas {
+    background-color: var(--dark-white);
+    border: 10px solid var(--orange);
+    border-radius: 10px;
 }
 
 div {
-    width: 100%;
-    max-width: 800px;
-
+    width: 800px;
     display: flex;
     justify-content: flex-end;
 }
@@ -58,8 +48,9 @@ div > a {
     color: var(--dark-violet);
 }
 
-canvas {
-    background-color: var(--dark-white);
-    border: 10px solid var(--orange);
-    border-radius: 10px;
+h1 {
+    font-family: 'Protest Guerrilla', 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 5rem;
+    color: var(--white);
+    margin: 2rem 0;
 }

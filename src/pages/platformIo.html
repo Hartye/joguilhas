@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +8,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/chat.css">
-    <link rel="stylesheet" href="../styles/chase.css">
-    <title>Chase</title>
+    <link rel="stylesheet" href="../styles/plataformIo.css">
+    <title>PlatformIo</title>
 </head>
-
 <body>
-    <h1>Chase</h1>
-    <h2 id="enemy"></h2>
+    <h1>PlatformIo</h1>
     <div>
         <a href="https://joguilhas.vercel.app/hub">Voltar</a>
     </div>
@@ -26,41 +22,33 @@
         const socket = io();
 
         class Player {
-            constructor(posX, posY, moveSpeed, width, height, color, enemy, afk) {
+            constructor(posX, posY, moveSpeed, width, height, afk) {
                 this.posX = posX;
                 this.posY = posY;
                 this.moveSpeed = moveSpeed;
                 this.width = width;
                 this.height = height;
-                this.color = color;
-                this.enemy = enemy;
                 this.afk = afk;
             }
         }
 
-        const displayRole = document.querySelector("#enemy");
         const canvas = document.querySelector("#jogo");
         const ctx = canvas.getContext("2d");
         const canvasHeight = 400;
         const canvasWidth = 800;
 
-        const choosePlayerRole = Math.floor(Math.random() * (10 - 0) + 0);
-        const playerRole = choosePlayerRole <= 3 ? true : false;
-
-        const player = new Player(10, 10, 10, 50, 50, playerRole ? "#FF0000" : "#00FF00", playerRole, 1800);
-
-        displayRole.innerHTML = player.enemy === true ? "Lobo" : "Ovelha";
+        const player = new Player(canvasHeight/2, 10, 20, 30, 50, 1800);
 
         const clearCanvas = () => {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         }
 
         const updateGame = (user) => {
-            ctx.fillStyle = user.color;
+            ctx.fillStyle = "#0000FF";
             ctx.fillRect(user.posX, user.posY, user.width, user.height);
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 350, 800, 50);
         }
-
-        updateGame(player);
 
         window.addEventListener("keydown", (event) => {
             let update = false;
@@ -73,23 +61,17 @@
                 player.posX -= player.posX > (0 + player.moveSpeed) ? player.moveSpeed : 0;
                 update = true;
             }
-            if (event.code == "KeyW") {
-                player.posY -= player.posY > (0 + player.moveSpeed) ? player.moveSpeed : 0;
-                update = true;
-            }
-            if (event.code == "KeyS") {
-                player.posY += player.posY < (canvasHeight - player.moveSpeed - player.height) ? player.moveSpeed : 0;
+            if (event.code == "Space") {
+                player.posY -= 50;
                 update = true;
             }
 
             if (update === true) {
-                socket.emit('move', player)
+                socket.emit('platform move', player)
             }
         });
 
-        socket.emit("join room", player);
-
-        socket.on('move', data => {
+        socket.on('platform move', data => {
             clearCanvas();
 
             data.forEach(s => {
@@ -99,19 +81,20 @@
                     updateGame(player);
                 }
                 else {
-                    const newPlayer = new Player(s.posX, s.posY, s.moveSpeed, s.width, s.height, s.color);
+                    const newPlayer = new Player(s.posX, s.posY, s.moveSpeed, s.width, s.height, s.afk);
                     updateGame(newPlayer);
                 }
             });
         });
 
-        socket.on('dead', playerId => {
+        socket.on('platform dead', playerId => {
             if (socket.id == playerId) {
-                alert("Killed");
+                alert("AFK");
                 location.reload();
             }
-        });
+        })
+
+        socket.emit('join platform room', player);
     </script>
 </body>
-
 </html>

@@ -1,0 +1,175 @@
+<head>
+  <title>Jogo do Galo</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../styles/galo.css" />
+</head>
+
+<body>
+  <div class="header">
+    <h1 id="Title">Jogo do Galo</h1>
+  </div>
+  <div class="mainDiv">
+    <div class="back">
+      <a href="https://joguilhas.vercel.app/hub">Voltar</a>
+    </div>
+    <div id="playerNames">
+      <div>
+        <p>You: <span id="playerName"></span></p>
+      </div>
+      <div>
+        <p>Oponent: <span id="oponentName"></span></p>
+      </div>
+    </div>
+    <div id="mainBox">
+      <div id="type">
+        <p>You're: <span id="playerType"></span></p>
+      </div>
+      <div id="nowPlaying">
+        <p id="playerTurn"><span>'s turn</span></p>
+      </div>
+
+      <div id="startPanel">
+        <p>Insert your name</p>
+        <input id="inputName" type="text" placeholder="Your name" />
+        <button id="bttnSearch" onclick="bttnSearch_OnClick()">
+          Start matchmaking
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="slots">
+    <div></div>
+    <div>
+      <button id="slot1" class="playableSlot"></button>
+      <button id="slot2" class="playableSlot"></button>
+      <button id="slot3" class="playableSlot"></button>
+      <button id="slot4" class="playableSlot"></button>
+      <button id="slot5" class="playableSlot"></button>
+      <button id="slot6" class="playableSlot"></button>
+      <button id="slot7" class="playableSlot"></button>
+      <button id="slot8" class="playableSlot"></button>
+      <button id="slot9" class="playableSlot"></button>
+    </div>
+    <div></div>
+  </div>
+  <div class="footer"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  document.getElementById("playerNames").style.display = "none";
+  document.getElementById("type").style.display = "none";
+  document.getElementById("nowPlaying").style.display = "none";
+  document.getElementById("slots").style.display = "none";
+
+  const socket = io();
+
+  const bttnSearch_OnClick = () => {
+    let nome = document.getElementById("inputName");
+    document.getElementById("playerName").innerText = nome.value;
+
+    if (nome.value == "" || nome.value == undefined) alert("Insert a name.");
+    else {
+      socket.emit("startMatchmaking", { name: nome.value });
+      document.getElementById("bttnSearch").disabled = true;
+    }
+  };
+
+  socket.on("gameover", (data) => {
+    alert(data);
+    location.reload();
+  });
+
+  socket.on("startGame", (game) => {
+    document.getElementById("startPanel").style.display = "none";
+    document.getElementById("playerNames").style.display = "flex";
+    document.getElementById("type").style.display = "block";
+    document.getElementById("nowPlaying").style.display = "block";
+    document.getElementById("slots").style.display = "grid";
+    let opponent = game.player1.id == socket.id ? game.player2 : game.player1;
+    document.getElementById("playerTurn").innerText =
+      game.round % 2 != 0 ? "X" : "O";
+
+    document.getElementById("oponentName").innerText = opponent.name;
+    document.getElementById("playerType").innerText = opponent.type;
+  });
+
+  document.querySelectorAll(".playableSlot").forEach((slot) => {
+    slot.addEventListener("click", function () {
+      const tipo = document.getElementById("playerType").innerText;
+      if (tipo == document.getElementById("playerTurn").innerText) {
+        console.log("picking slot");
+        console.log(socket.id);
+        socket.emit("slotPicked", { slotId: slot.id, type: tipo });
+      }
+    });
+  });
+
+  socket.on("slotPicked", (data) => {
+    const slot = document.getElementById(data.slotId);
+    slot.innerText = data.type;
+    slot.disabled = true;
+    document.getElementById("playerTurn").innerText =
+      data.type == "X" ? "O" : "X";
+    setTimeout(() => checkIfOver(socket.id, data.round), 1000);
+  });
+
+  const checkIfOver = (id, round) => {
+    console.log("Checking if it's over");
+    if (round < 10) {
+      document.getElementById("slot1").innerText == ""
+        ? (b1 = "a")
+        : (b1 = document.getElementById("slot1").innerText);
+      document.getElementById("slot2").innerText == ""
+        ? (b2 = "b")
+        : (b2 = document.getElementById("slot2").innerText);
+      document.getElementById("slot3").innerText == ""
+        ? (b3 = "c")
+        : (b3 = document.getElementById("slot3").innerText);
+      document.getElementById("slot4").innerText == ""
+        ? (b4 = "d")
+        : (b4 = document.getElementById("slot4").innerText);
+      document.getElementById("slot5").innerText == ""
+        ? (b5 = "e")
+        : (b5 = document.getElementById("slot5").innerText);
+      document.getElementById("slot6").innerText == ""
+        ? (b6 = "f")
+        : (b6 = document.getElementById("slot6").innerText);
+      document.getElementById("slot7").innerText == ""
+        ? (b7 = "g")
+        : (b7 = document.getElementById("slot7").innerText);
+      document.getElementById("slot8").innerText == ""
+        ? (b8 = "h")
+        : (b8 = document.getElementById("slot8").innerText);
+      document.getElementById("slot9").innerText == ""
+        ? (b9 = "i")
+        : (b9 = document.getElementById("slot9").innerText);
+
+      if (
+        (b1 == b2 && b2 == b3) ||
+        (b4 == b5 && b5 == b6) ||
+        (b7 == b8 && b8 == b9) ||
+        (b1 == b4 && b4 == b7) ||
+        (b2 == b5 && b5 == b8) ||
+        (b3 == b6 && b6 == b9) ||
+        (b1 == b5 && b5 == b9) ||
+        (b3 == b5 && b5 == b7)
+      ) {
+        if (round % 2 !== 0) {
+          socket.emit("gameover", "X Won");
+        } else {
+          socket.emit("gameover", "O Won");
+        }
+      }
+    } else {
+      socket.emit("gameover", "Draw");
+    }
+  };
+</script>

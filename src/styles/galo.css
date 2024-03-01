@@ -1,0 +1,127 @@
+:root {
+    --dark-violet: #22092C;
+    --dark-red: #872341;
+    --red: #BE3144;
+    --orange: #F05941;
+    --white: #F6F1EE;
+    --dark-white: #f5e1d5;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+p {
+    font-size: 1.2rem;
+    padding: 2px 5px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: var(--dark-violet);
+    font-family: sans-serif;
+    color: var(--white);
+}
+
+input {
+    padding: .5rem 1rem;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+}
+
+.header {
+    display: grid;
+    justify-items: center;
+}
+
+#title {
+    font-family: 'Protest Guerrilla', 'Roboto', Arial, Helvetica, sans-serif;
+    margin: 2rem 0;
+    font-size: 5rem;
+    color: var(--white);
+}
+
+#playerNames {
+    display: flex;
+    gap: 20px;
+}
+
+#mainBox {
+    display: grid;
+    justify-items: center;
+}
+
+div.mainDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#startPanel {
+    display: grid;
+}
+
+#bttnSearch {
+    margin: 20px 0;
+    padding: .5rem 1rem;
+    background-color: var(--orange);
+    color: var(--white);
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 5px;
+}
+
+#bttnSearch:focus {
+    background-color: var(--dark-red);
+}
+
+#bttnSearch:hover {
+    cursor: pointer;
+}
+
+#slots {
+    display: grid;
+    grid-template-columns: 5fr 1fr 5fr;
+    margin-inline: auto;
+    justify-items: center;
+    margin: 2rem 0;
+}
+#slots>div{
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.playableSlot {
+    font-size: 2rem;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    margin: 0;
+    border: 2px solid var(--orange);
+}
+
+div.back {
+    width: 400px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+div.back > a {
+    text-decoration: none;
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    background-color: var(--white);
+    color: var(--dark-violet);
+}

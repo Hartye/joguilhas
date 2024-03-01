@@ -20,6 +20,18 @@ const io = new Server(app);
 
 const FPS = 30;
 let rooms = [];
+let platformRooms = [];
+
+class Player {
+    constructor(Id, nome, tipo) {
+        this.id = Id,
+        this.name = nome,
+        this.type = tipo
+    }
+}
+
+const queue = []
+const nowPlaying = []
 
 // Socket
 io.on('connection', (socket) => {
@@ -35,8 +47,17 @@ io.on('connection', (socket) => {
             ...data,
             id: socket.id
         });
-        console.log(`${socket.id} joined the room`)
+        console.log(`${socket.id} joined the room`);
         console.log(rooms);
+    });
+
+    socket.on('join platform room', data => {
+        platformRooms.push({
+            ...data,
+            id: socket.id
+        })
+        console.log(`${socket.id} joined platform room`);
+        console.log(platformRooms);
     });
 
     socket.on('move', (data) => {
@@ -48,6 +69,45 @@ io.on('connection', (socket) => {
         rooms[index].afk = 1800;
     });
 
+    socket.on('platform move', (data) => {
+        const index = platformRooms.findIndex(s => s.id === socket.id);
+        platformRooms[index] = {
+            ...data,
+            id: socket.id
+        }
+        platformRooms[index].afk = 1800;
+    });
+
+    socket.on("startMatchmaking", (playerInfo) => {
+        queue.push(new Player(socket.id, playerInfo.name, (queue.length % 2 != 0 ? "X" : "O")))
+        if (queue.length == 2) {
+            nowPlaying.push({
+                player1: queue[0],
+                player2: queue[1],
+                round: 1
+            })
+            queue.splice(0, 2)
+            io.emit("startGame", nowPlaying[nowPlaying.length - 1]);
+        }
+    });
+
+
+    socket.on("slotPicked", (data) => {
+        console.log("Todos os jogos:")
+        console.log(nowPlaying)
+        const currentGame = nowPlaying.find(game => game.player1.id == socket.id || game.player2.id == socket.id)
+        console.log("Jogo atual:")
+        console.log(currentGame)
+        io.emit("slotPicked", { ...data, round: ++currentGame.round })
+    });
+
+    socket.on("gameover", (data) => {
+        console.log("GameOver");
+        nowPlaying.splice(nowPlaying.findIndex(game => game.player1.id == socket.id || game.player2.id == socket.id), 1);
+        io.emit("gameover", data);
+    });
+
+    const gravity = 5;
     setInterval(() => {
         io.emit('move', rooms);
         rooms.forEach(s => {
@@ -67,6 +127,22 @@ io.on('connection', (socket) => {
                     io.emit('dead', victim.id);
                 }
             });
+        });
+
+        io.emit('platform move', platformRooms);
+        
+        platformRooms.forEach(s => {
+            if (s.posY + s.height < 350) {
+                s.posY += gravity;
+            }
+
+            if (s.afk <= 0) {
+                platformRooms.splice(platformRooms.findIndex(i => i.id == s.id), 1);
+                io.emit('platform dead', s.id);
+            }
+            else {
+                s.afk -= 1;
+            }
         });
     }, 1000 / FPS);
 });
@@ -110,6 +186,14 @@ router.get("/games/chase", (req, res) => {
     return res.sendFile(__dirname + "/pages/chase.html");
 });
 
+router.get("/games/platformIo", (req, res) => {
+    return res.sendFile(__dirname + "/pages/platformIo.html");
+});
+
+router.get("/games/tictactoe", (req, res) => {
+    return res.sendFile(__dirname + "/pages/galo.html");
+});
+
 // Endpoints da API
 router.post("/add/letra", bodyParser.json(), (req, res) => {
     return addLetra(req, res);
@@ -148,6 +232,14 @@ router.get("/styles/chase.css", (req, res) => {
     return res.sendFile(__dirname + "/styles/chase.css");
 });
 
+router.get("/styles/plataformIo.css", (req, res) => {
+    return res.sendFile(__dirname + "/styles/plataformIo.css");
+});
+
+router.get("/styles/galo.css", (req, res) => {
+    return res.sendFile(__dirname + "/styles/galo.css");
+});
+
 router.get("/scripts/letras.js", (req, res) => {
     return res.sendFile(__dirname + "/scripts/letras.js");
 });
@@ -162,6 +254,14 @@ router.get("/images/chat.svg", (req, res) => {
 
 router.get("/images/chase.svg", (req, res) => {
     return res.sendFile(__dirname + "/images/chase.svg");
+});
+
+router.get("/images/platformIo.svg", (req, res) => {
+    return res.sendFile(__dirname + "/images/platformIo.svg");
+});
+
+router.get("/images/tic-tac-toe.svg", (req, res) => {
+    return res.sendFile(__dirname + "/images/tic-tac-toe.svg");
 });
 
 router.get("/images/abc.png", (req, res) => {
